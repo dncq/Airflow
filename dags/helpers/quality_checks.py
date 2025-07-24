@@ -1,13 +1,6 @@
-from airflow import DAG
-from airflow.providers.standard.operators.empty import EmptyOperator
-from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
-from airflow.providers.standard.operators.python import PythonOperator
 from airflow.hooks.base import BaseHook
-from datetime import datetime, timedelta
-import os
-import json
 import psycopg2
-from helpers.sql_queries import SqlQueries
+
 
 POSTGRES_CONN_ID = 'postgres_local'
 

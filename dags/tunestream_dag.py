@@ -11,13 +11,14 @@ from helpers.load_json_to_postgres import load_json_to_postgres
 from helpers.quality_checks import run_quality_checks
 
 
-SONG_DATA_PATH = '/opt/airflow/data/song_data'
-LOG_DATA_PATH = '/opt/airflow/data/log_data'
+SONG_DATA_PATH = '/opt/airflow/plugins/data/song_data'
+LOG_DATA_PATH = '/opt/airflow/plugins/data/log_data'
 POSTGRES_CONN_ID = 'postgres_local'
 
 default_args = {
     'owner': 'tunestream',
     'depends_on_past': False,
+    'start_date':datetime(2025, 1, 1),
     'retries': 3,
     'retry_delay': timedelta(minutes=5),
     'email_on_retry': False
@@ -27,7 +28,6 @@ dag = DAG(
     'etl_pipeline_local_postgres',
     default_args=default_args,
     description='ETL pipeline to load JSON song/log data into local PostgreSQL',
-    start_date=datetime(2025, 1, 1),
     schedule=None,
     catchup=False,
     tags=['etl', 'postgres']
