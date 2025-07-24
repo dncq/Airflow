@@ -12,7 +12,6 @@ from helpers.sql_queries import SqlQueries
 POSTGRES_CONN_ID = 'postgres_local'
 
 def run_quality_checks(**kwargs):
-    # from airflow.hooks.base import BaseHook
 
     conn = BaseHook.get_connection(POSTGRES_CONN_ID)
     pg_conn = psycopg2.connect(

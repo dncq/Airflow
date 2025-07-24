@@ -10,7 +10,7 @@ from helpers.sql_queries import SqlQueries
 from helpers.load_json_to_postgres import load_json_to_postgres
 from helpers.quality_checks import run_quality_checks
 
-# Constants
+
 SONG_DATA_PATH = '/opt/airflow/data/song_data'
 LOG_DATA_PATH = '/opt/airflow/data/log_data'
 POSTGRES_CONN_ID = 'postgres_local'
@@ -32,68 +32,6 @@ dag = DAG(
     catchup=False,
     tags=['etl', 'postgres']
 )
-
-# def load_json_to_postgres(table, path, columns, **kwargs):
-#     from airflow.hooks.base import BaseHook
-
-#     conn = BaseHook.get_connection(POSTGRES_CONN_ID)
-#     pg_conn = psycopg2.connect(
-#         host=conn.host,
-#         dbname=conn.schema,
-#         user=conn.login,
-#         password=conn.password,
-#         port=conn.port
-#     )
-#     cursor = pg_conn.cursor()
-
-#     for root, _, files in os.walk(path):
-#         for file in files:
-#             if not file.endswith('.json'):
-#                 continue
-#             filepath = os.path.join(root, file)
-#             with open(filepath) as f:
-#                 try:
-#                     data = json.load(f)
-#                 except json.JSONDecodeError as e:
-#                     print(f"Skipping invalid JSON {filepath}: {e}")
-#                     continue
-#                 values = [data.get(col) for col in columns]
-#                 placeholders = ','.join(['%s'] * len(columns))
-#                 query = f"INSERT INTO {table} ({','.join(columns)}) VALUES ({placeholders})"
-#                 cursor.execute(query, values)
-
-#     pg_conn.commit()
-#     cursor.close()
-#     pg_conn.close()
-
-
-# def run_quality_checks(**kwargs):
-#     from airflow.hooks.base import BaseHook
-
-#     conn = BaseHook.get_connection(POSTGRES_CONN_ID)
-#     pg_conn = psycopg2.connect(
-#         host=conn.host,
-#         dbname=conn.schema,
-#         user=conn.login,
-#         password=conn.password,
-#         port=conn.port
-#     )
-#     cursor = pg_conn.cursor()
-
-#     checks = {
-#         "songplays": "SELECT COUNT(*) FROM songplays;",
-#         "users": "SELECT COUNT(*) FROM users WHERE userid IS NULL;"
-#     }
-
-#     for table, query in checks.items():
-#         cursor.execute(query)
-#         result = cursor.fetchone()
-#         if result[0] == 0:
-#             raise ValueError(f"Data quality check failed for {table}: no records found.")
-#         print(f"Data quality check passed for {table}: {result[0]} records.")
-
-#     cursor.close()
-#     pg_conn.close()
 
 with dag:
     begin_execution = EmptyOperator(task_id='Begin_execution')
@@ -163,7 +101,6 @@ with dag:
 
     end_execution = EmptyOperator(task_id='End_execution')
 
-    # Task dependencies
     begin_execution >> [stage_songs, stage_events] >> load_songplays_fact_table
     load_songplays_fact_table >> [
         load_user_dim_table,

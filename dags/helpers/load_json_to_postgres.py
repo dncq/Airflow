@@ -12,7 +12,6 @@ from helpers.sql_queries import SqlQueries
 POSTGRES_CONN_ID = 'postgres_local'
 
 def load_json_to_postgres(table, path, columns, **kwargs):
-    # from airflow.hooks.base import BaseHook
 
     conn = BaseHook.get_connection(POSTGRES_CONN_ID)
     pg_conn = psycopg2.connect(
