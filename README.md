@@ -1,8 +1,4 @@
-# TuneStream ETL Pipeline (Airflow‑Postgres)
-
-This project implements an end-to-end ETL pipeline called **TuneStream**, built with **Apache Airflow 3.0.3**. It ingests JSON song and log data, stages it in PostgreSQL, transforms it into a star‑schema data warehouse, runs data quality checks, and orchestrates the workflow via Airflow.
-
----
+# TuneStream ETL Pipeline 
 
 ## Project Structure
 
