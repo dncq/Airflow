@@ -79,18 +79,6 @@
 
 ---
 
-## Testing & Validation
-
-- **Directory parser test**:
-  - Use `test_json_structure.py` to ensure your data is correctly discovered
-- **Airflow validation**:
-  ```bash
-  airflow dags list
-  airflow dags show etl_pipeline_local_postgres
-  ```
-
----
-
 ## Installation Requirements
 
 Use Python 3.10 and install with:
