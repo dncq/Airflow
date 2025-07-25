@@ -1,6 +1,6 @@
 # QuyDNC1 Airflow Final Practive Test - TuneStream ETL Pipeline
 
-![ETL Pipeline Diagram](/screenshots/pipelines.png)
+![ETL Pipeline Diagram](/screenshots/pipeline.png)
 
 ## Project Structure
 
