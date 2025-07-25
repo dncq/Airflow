@@ -3,9 +3,6 @@ from airflow.providers.standard.operators.empty import EmptyOperator
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 from airflow.providers.standard.operators.python import PythonOperator
 from datetime import datetime, timedelta
-import os
-import json
-import psycopg2
 from helpers.sql_queries import SqlQueries
 from helpers.load_json_to_postgres import load_json_to_postgres
 from helpers.quality_checks import run_quality_checks
@@ -28,7 +25,7 @@ dag = DAG(
     'etl_pipeline_local_postgres',
     default_args=default_args,
     description='ETL pipeline to load JSON song/log data into local PostgreSQL',
-    schedule=None,
+    schedule='@hourly', 
     catchup=False,
     tags=['etl', 'postgres']
 )
@@ -57,41 +54,64 @@ with dag:
             'table': 'staging_events',
             'path': LOG_DATA_PATH,
             'columns': [
-                'artist', 'auth', 'firstname', 'gender', 'iteminsession', 'lastname',
+                'artist', 'auth', 'firstName', 'gender', 'itemInSession', 'lastName',
                 'length', 'level', 'location', 'method', 'page', 'registration',
-                'sessionid', 'song', 'status', 'ts', 'useragent', 'userid'
+                'sessionId', 'song', 'status', 'ts', 'userAgent', 'userId'
             ]
         }
     )
 
+
     load_songplays_fact_table = SQLExecuteQueryOperator(
         task_id='Load_songplays_fact_table',
         conn_id=POSTGRES_CONN_ID,
-        sql=SqlQueries.songplay_table_insert,
+        sql="""
+            INSERT INTO public.songplays (
+                playid, start_time, userid, level, songid,
+                artistid, sessionid, location,user_agent
+            )
+            {}
+        """.format(SqlQueries.songplay_table_insert),
     )
 
     load_user_dim_table = SQLExecuteQueryOperator(
         task_id='Load_user_dim_table',
         conn_id=POSTGRES_CONN_ID,
-        sql=SqlQueries.user_table_insert,
+        sql="""
+            INSERT INTO public.users (userid, first_name, last_name, gender, level)
+            {}
+        """.format(SqlQueries.user_table_insert),
     )
 
     load_song_dim_table = SQLExecuteQueryOperator(
         task_id='Load_song_dim_table',
         conn_id=POSTGRES_CONN_ID,
-        sql=SqlQueries.song_table_insert,
+        sql="""
+            INSERT INTO public.songs (songid, title, artistid, year, duration)
+            {}
+        """.format(SqlQueries.song_table_insert),
     )
 
     load_artist_dim_table = SQLExecuteQueryOperator(
         task_id='Load_artist_dim_table',
         conn_id=POSTGRES_CONN_ID,
-        sql=SqlQueries.artist_table_insert,
+        sql="""
+            INSERT INTO public.artists (
+                artistid, name, location, lattitude, longitude
+            )
+            {}
+        """.format(SqlQueries.artist_table_insert),
     )
 
     load_time_dim_table = SQLExecuteQueryOperator(
         task_id='Load_time_dim_table',
         conn_id=POSTGRES_CONN_ID,
-        sql=SqlQueries.time_table_insert,
+        sql="""
+            INSERT INTO public.time (
+                start_time, hour, day, week, month, year, weekday
+            )
+            {}
+        """.format(SqlQueries.time_table_insert),
     )
 
     run_data_quality_checks = PythonOperator(

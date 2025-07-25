@@ -1,4 +1,5 @@
 class SqlQueries:
+
     songplay_table_insert = ("""
 SELECT
   md5(events.sessionid::text || events.start_time::text) AS songplay_id,

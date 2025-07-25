@@ -81,3 +81,8 @@ CREATE TABLE public.users (
 	"level" varchar(256),
 	CONSTRAINT users_pkey PRIMARY KEY (userid)
 );
+
+TRUNCATE TABLE public.artists CASCADE;
+TRUNCATE TABLE public.songs CASCADE;
+TRUNCATE TABLE public.staging_songs CASCADE;
+TRUNCATE TABLE public.staging_events CASCADE;

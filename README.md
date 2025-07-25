@@ -5,15 +5,18 @@
 ```
 .
 ├── dags/
-│   └── etl_dag.py              # Main Airflow DAG
+│   └── tunestream_dag.py              
+|   └── helpers
+|       └── load_json_to_postgres.py
+|       └── quality_check.py
+|       └── sql_query.py 
 ├── plugins/
-│   └── helpers/
-│       └── sql_queries.py      # SQL statements for data loading
-├── data/
-│   ├── song_data/              # Song JSON files under nested folders
-│   └── log_data/               # Log JSON files
-├── create_tables.sql          # Schema creation script
-├── docker-compose.yml         # Local dev setup with Airflow & Postgres
+│   └── data/
+│       └── song_data      
+│       └── log_data  
+├── screenshots/
+├── create_tables.sql          
+├── docker-compose.yml         
 └── README.md
 ```
 
