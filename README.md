@@ -44,7 +44,7 @@
 - Ensures key tables (e.g. `songplays`, `users`) have records
 - Fails fast if any check fails
 
-### Docker Compose (`docker-compose.yml`)
+### Docker Compose (`docker-compose.yaml`)
 - Boots:
   - PostgreSQL
   - Airflow webserver & scheduler
