@@ -71,6 +71,7 @@ with dag:
                 artistid, sessionid, location,user_agent
             )
             {}
+            ON CONFLICT DO NOTHING;
         """.format(SqlQueries.songplay_table_insert),
     )
 
@@ -80,6 +81,7 @@ with dag:
         sql="""
             INSERT INTO public.users (userid, first_name, last_name, gender, level)
             {}
+            ON CONFLICT DO NOTHING;
         """.format(SqlQueries.user_table_insert),
     )
 
@@ -89,6 +91,7 @@ with dag:
         sql="""
             INSERT INTO public.songs (songid, title, artistid, year, duration)
             {}
+            ON CONFLICT DO NOTHING;
         """.format(SqlQueries.song_table_insert),
     )
 
@@ -100,6 +103,7 @@ with dag:
                 artistid, name, location, lattitude, longitude
             )
             {}
+            ON CONFLICT DO NOTHING;
         """.format(SqlQueries.artist_table_insert),
     )
 
@@ -111,6 +115,7 @@ with dag:
                 start_time, hour, day, week, month, year, weekday
             )
             {}
+            ON CONFLICT DO NOTHING;
         """.format(SqlQueries.time_table_insert),
     )
 

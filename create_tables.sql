@@ -71,7 +71,7 @@ CREATE TABLE public."time" (
 	"year" int4,
 	weekday varchar(256),
 	CONSTRAINT time_pkey PRIMARY KEY (start_time)
-) ;
+);
 
 CREATE TABLE public.users (
 	userid int4 NOT NULL,
@@ -84,5 +84,8 @@ CREATE TABLE public.users (
 
 TRUNCATE TABLE public.artists CASCADE;
 TRUNCATE TABLE public.songs CASCADE;
+TRUNCATE TABLE public.songplays CASCADE;
 TRUNCATE TABLE public.staging_songs CASCADE;
 TRUNCATE TABLE public.staging_events CASCADE;
+TRUNCATE TABLE public.users CASCADE;
+TRUNCATE TABLE public.time CASCADE;

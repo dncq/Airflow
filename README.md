@@ -24,7 +24,7 @@
 
 ## Components
 
-### Apache Airflow DAG (`etl_dag.py`)
+### Apache Airflow DAG (`tunestream_dag.py`)
 - Orchestrates tasks using:
   - `EmptyOperator` to mark start/end
   - `PythonOperator` for JSON ingestion

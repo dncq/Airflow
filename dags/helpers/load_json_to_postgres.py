@@ -55,14 +55,47 @@ def load_json_to_postgres(table, path, columns, **kwargs):
                             except json.JSONDecodeError as e_line:
                                 print(f" Skipping invalid line: {e_line}")
                         print(f"Parsed {len(events)} JSON lines")
-                # print("Parsed JSON content, processing events...")
+                print("Parsed JSON content, processing events...")
                 print(events) 
                 for event in events:
                     values = [event.get(col) for col in columns ]
-                    placeholders = ','.join(['%s'] * len(columns))
-                    query = f"INSERT INTO {table} ({','.join(columns)}) VALUES ({placeholders})"
-                    cursor.execute(query, values)
-                    inserted_rows += 1
+                    print(values)
+                    
+                    lower_case_columns = [col.lower() for col in columns]
+                    if "year" in columns:
+                        placeholders = ','.join(['%s'] * len(columns))
+                        query = f"INSERT INTO {table} ({','.join(lower_case_columns)}) VALUES ({placeholders})"
+                        cursor.execute(query, values)
+                        inserted_rows += 1
+                    else:
+                        query = """
+                        INSERT INTO staging_events (
+                            artist, auth, firstname, gender, iteminsession, lastname, length,
+                            level, location, method, page, registration, sessionid, song,
+                            status, ts, useragent, userid
+                        ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                    """
+                        cursor.execute(query, (
+                                event.get('artist'),
+                                event.get('auth'),
+                                event.get('firstName'),
+                                event.get('gender'),
+                                event.get('itemInSession'),
+                                event.get('lastName'),
+                                event.get('length'),
+                                event.get('level'),
+                                event.get('location'),
+                                event.get('method'),
+                                event.get('page'),
+                                event.get('registration'),
+                                event.get('sessionId'),
+                                event.get('song'),
+                                event.get('status'),
+                                event.get('ts'),
+                                event.get('userAgent'),
+                                int(event.get('userId')) if event.get('userId') not in ('', None, '') else None
+                            ))
+                        inserted_rows += 1
 
             except Exception as e:
                 print(f"[ERROR] processing {filepath}: {e}")
