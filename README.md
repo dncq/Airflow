@@ -1,4 +1,11 @@
-# TuneStream ETL Pipeline 
+# QuyDNC1 Airflow Final Practive Test - TuneStream ETL Pipeline
+
+Using Apache Airflow, the ETL pipeline extracts JSON data files, processes, and transforms 
+them, and loads the results into a star-schema relational database according to the chosen setup. 
+After the ETL process is finished, data quality checks are conducted to detect any inconsistencies 
+in the datasets. 
+
+![ETL Pipeline Diagram](/screenshots/pipeline.png)
 
 ## Project Structure
 
@@ -76,18 +83,6 @@
 5. **Inspect DAG in Airflow UI:**
    - Enable and trigger `etl_pipeline_local_postgres`
    - Monitor task execution and logs
-
----
-
-## Testing & Validation
-
-- **Directory parser test**:
-  - Use `test_json_structure.py` to ensure your data is correctly discovered
-- **Airflow validation**:
-  ```bash
-  airflow dags list
-  airflow dags show etl_pipeline_local_postgres
-  ```
 
 ---
 
